@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# Environment Variables
+.env
+.env.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+construction.db
+
+# Generated Files
+generated_layouts/
+layout_embeddings.npy
+layout_areas.npy
+
+# Session/Temp Files
+recalibration_session.json
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
