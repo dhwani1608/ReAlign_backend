@@ -14,6 +14,11 @@ load_dotenv()
 def _build_database_url() -> str:
     database_url = os.getenv("DATABASE_URL")
     if database_url:
+        if database_url.startswith("postgres://"):
+            database_url = database_url.replace("postgres://", "postgresql://", 1)
+        if "sslmode=" not in database_url:
+            separator = "&" if "?" in database_url else "?"
+            database_url = f"{database_url}{separator}sslmode=require"
         return database_url
 
     pg_host = os.getenv("PGHOST")
@@ -26,14 +31,17 @@ def _build_database_url() -> str:
         encoded_password = quote_plus(pg_password)
         return f"postgresql://{pg_user}:{encoded_password}@{pg_host}:{pg_port}/{pg_database}?sslmode=require"
 
+    if os.getenv("RAILWAY_ENVIRONMENT"):
+        raise RuntimeError(
+            "Database is not configured in Railway. Set DATABASE_URL from your Railway Postgres service variable reference."
+        )
+
     return "postgresql://postgres:dhwani@localhost:5432/createtech"
 
 
-DB_URL = _build_database_url()
-
-
 def get_db_connection():
-    return psycopg.connect(DB_URL, row_factory=dict_row)
+    db_url = _build_database_url()
+    return psycopg.connect(db_url, row_factory=dict_row)
 
 
 def init_db():
