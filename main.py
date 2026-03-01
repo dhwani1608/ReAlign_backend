@@ -21,8 +21,8 @@ app = FastAPI(
     redoc_url="/redoc",
     openapi_url="/openapi.json"
 )
-app.add_middleware(SecurityHeadersMiddleware)
-app.add_middleware(RateLimitMiddleware)
+#app.add_middleware(SecurityHeadersMiddleware)
+#app.add_middleware(RateLimitMiddleware)
 
 # CORS middleware - restrict to specific origins in production
 app.add_middleware(
