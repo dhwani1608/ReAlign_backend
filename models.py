@@ -23,14 +23,7 @@ class UserCreate(BaseModel):
 class UserLogin(BaseModel):
     email: str
     password: str
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
-    user: "UserResponse"
-
-
+    
 class UserResponse(BaseModel):
     id: int
     email: str
@@ -41,6 +34,11 @@ class UserResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserResponse
 
 # === Layout Models ===
 class LayoutDesign(BaseModel):
