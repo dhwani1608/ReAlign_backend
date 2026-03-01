@@ -12,9 +12,6 @@ from security import RateLimitMiddleware, SecurityHeadersMiddleware
 # Import routers
 from routers import auth, designer, site
 
-# Initialize database
-init_db()
-
 # Create FastAPI app
 app = FastAPI(
     title="ReAlign AI - Backend API",
@@ -46,6 +43,11 @@ app.add_middleware(RateLimitMiddleware)
 generated_layouts_dir = os.path.join(os.path.dirname(__file__), "generated_layouts")
 os.makedirs(generated_layouts_dir, exist_ok=True)
 app.mount("/generated-layouts", StaticFiles(directory=generated_layouts_dir), name="generated-layouts")
+
+
+@app.on_event("startup")
+async def startup_event():
+    init_db()
 
 
 # ===== Root Endpoint =====

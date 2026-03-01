@@ -3,10 +3,33 @@
 import os
 import json
 from typing import Optional, List, Dict
+from urllib.parse import quote_plus
 import psycopg
 from psycopg.rows import dict_row
+from dotenv import load_dotenv
 
-DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:dhwani@localhost:5432/createtech")
+load_dotenv()
+
+
+def _build_database_url() -> str:
+    database_url = os.getenv("DATABASE_URL")
+    if database_url:
+        return database_url
+
+    pg_host = os.getenv("PGHOST")
+    pg_port = os.getenv("PGPORT", "5432")
+    pg_user = os.getenv("PGUSER")
+    pg_password = os.getenv("PGPASSWORD")
+    pg_database = os.getenv("PGDATABASE")
+
+    if all([pg_host, pg_user, pg_password, pg_database]):
+        encoded_password = quote_plus(pg_password)
+        return f"postgresql://{pg_user}:{encoded_password}@{pg_host}:{pg_port}/{pg_database}?sslmode=require"
+
+    return "postgresql://postgres:dhwani@localhost:5432/createtech"
+
+
+DB_URL = _build_database_url()
 
 
 def get_db_connection():
@@ -341,5 +364,3 @@ class IssueDB:
         conn.close()
 
 
-# Initialize database on import
-init_db()
