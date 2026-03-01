@@ -28,7 +28,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://localhost:3001",
-        "https://realigncreatech.vercel.app/"
+        "https://realigncreatech.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE"],  # Restrict to needed methods
