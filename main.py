@@ -21,23 +21,21 @@ app = FastAPI(
     redoc_url="/redoc",
     openapi_url="/openapi.json"
 )
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(RateLimitMiddleware)
 
 # CORS middleware - restrict to specific origins in production
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "https://realigncreatech.vercel.app",
         "http://localhost:3000",
         "http://localhost:3001",
-        "https://realigncreatech.vercel.app"
     ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],  # Restrict to needed methods
+    allow_methods=["*"],  # Restrict to needed methods
     allow_headers=["*"],
 )
-
-# Security middleware - add BEFORE CORS
-app.add_middleware(SecurityHeadersMiddleware)
-app.add_middleware(RateLimitMiddleware)
 
 generated_layouts_dir = os.path.join(os.path.dirname(__file__), "generated_layouts")
 os.makedirs(generated_layouts_dir, exist_ok=True)
